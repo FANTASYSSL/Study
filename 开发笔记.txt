@@ -1,0 +1,47 @@
+Never interrupt your enemy when he's making a mistake.
+
+https://youtu.be/Weg7ZT1L3uE
+
+hibernate 使用记录：
+	1.inverse：为true时表示不维护中间表关系;(默认false)
+	
+	2.	fetch: 抓取策略，默认为select;
+			 * select    :默认值。发送一条select语句查询关联对象。
+			 * join  :发送一条迫切左外连接查询关联对象。
+		     * subselect :发送一条子查询查询关联对象。
+
+
+js:
+	1.页面加载时执行函数：
+		$(document).ready(function(){.....}) 
+	   /$(function($){....})
+	   
+	2.ajax 验证文件名是否重复，<result type="json" />,ret字符串为返回内容
+		//super.printJsonStr(JSONObject.fromObject(ret));
+	3.js删除前提示：
+			_confirm("提示的内容",function(){
+				//需要执行的内容
+			})
+	4.
+5.Struts2 在xml取不到正确的值，不加#号默认从applicationContext中取值****
+	 例： <param name="project.id">${#request.project.id}</param>	
+	 
+	 
+6.jQuery 手动验证表单
+	if (!$("#contractUpdateConractor").validationEngine("validate")) {
+			return;
+	}
+	
+
+	 
+	 
+	 
+	 
+	 
+	 
+	 
+	 
+	 
+	 
+	 
+
