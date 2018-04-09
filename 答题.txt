@@ -1,0 +1,86 @@
+1.1，什么是线程安全
+ RP:在多线程环境下，对某个方法或者某个实例的调用，能正确处理多个线程间的共享变量.实际上多个线程对
+ 	共享资源的写的操作时会产生线程安全问题。
+
+2，都说String是不可变的，为什么我可以这样做呢
+   String a = "1";
+   a = "2";
+ RP：String 是一个引用数据类型，给String赋值只是将字符串地址赋给String变量，
+ 	而字符串的值并没改变，不可变说的是字符串值不可变；原因在于String 底层使用char数组实现，
+ 	并且被private final 修饰了，被final修饰的字段创建以后就不可以更改。
+
+ 3.HashMap的实现原理
+
+ 4，写出三种单例模式，如果能考虑线程安全最好
+  RP:(1).懒汉式（非线程安全）
+  		public class Singleton {
+  			private Singleton(){}
+  			private static Singleton instance;
+  			public static Singleton getInstance(){
+  				if (instance == null) {
+  					instance = new Singleton();
+  				}
+  				return instance;
+  			}
+  		}
+  	(2).饿汉式
+  		public class Singleton{
+  			private Singleton(){}
+  			private static Singleton instance = new Singleton();
+  			public static Singleton getInstance(){
+  				return instance;
+  			}
+  		}
+  	(3).静态内部类
+  		public class Singleton{
+  			private Singleton(){}
+  			private static class SingletonHolder{
+  				private static final Singleton INSTANCE = new Singleton();
+  			}
+  			public static final Singleton getInstance(){
+  				return SingletonHolder.INSTANCE;
+  			}
+  		}
+  	(4).双重校验锁
+  		public class Singleton{
+  			private Singleton(){}
+  			private volatile static Singleton instance = null;
+  			public static Singleton getInstance(){
+  				if (instance == null) {
+  					synchronized(Singleton.class){
+  						if (instance == null) {
+  							instance = new Singleton();
+  						}
+  					}
+  				}
+  				return instance;
+  			}
+  		}
+
+5，ArrayList和LinkedList有什么区别
+ RP:1. ArrayList是实现了基于动态数组的数据结构，而LinkedList是基于链表的数据结构；
+ 	2.对于随机访问get和set，ArrayList要优于LinkedList，因为LinkedList要移动指针；
+ 	3.LinkedList可以实现栈、队列以及双端队列等数据结构;
+6，实现线程的2种方式
+ RP：1.继承thread类;2.实现runnable接口;
+
+7，JVM的内存结构
+ RP：java内存主要分为6部分，分别是程序计数器，虚拟机栈，本地方法栈，堆，方法区和直接内存;
+ 	其中程序计算器与虚拟机栈是线程私有，其他内存区域线程共享。
+
+8，Lock与Synchronized的区别
+ RP:synchronized：在需要同步的对象中加入此控制，synchronized可以加在方法上，也可以加在特定代码块中，括号中表示需要锁的对象。
+ 	lock：需要显示指定起始位置和终止位置。一般使用ReentrantLock类做为锁，多个线程中必须要使用一个ReentrantLock类做为对象才能保证锁的生效。且在加锁和解锁处需要通过lock()和unlock()显示指出。所以一般会在finally块中写unlock()以防死锁。
+
+9，数据库隔离级别有哪些，各自的含义是什么，MYSQL默认的隔离级别是是什么。
+ RP:
+
+10，请解释如下jvm参数的含义：
+-server -Xms512m -Xmx512m -Xss1024K 
+-XX:PermSize=256m -XX:MaxPermSize=512m -XX:MaxTenuringThreshold=20 XX:CMSInitiatingOccupancyFraction=80 -XX:+UseCMSInitiatingOccupancyOnly。
+ RP:
+
+
+
+
+
