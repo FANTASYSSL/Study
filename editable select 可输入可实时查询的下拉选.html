@@ -1,0 +1,36 @@
+<!DOCTYPE html>
+<html>
+
+	<head>
+		<meta charset="UTF-8">
+		<title>上海市科技创新券服务平台</title>
+
+		<script src="js/jquery-3.2.1.min.js" type="text/javascript" charset="utf-8"></script>
+		<script src="js/jquery-editable-select.js" type="text/javascript" charset="utf-8"></script>
+		<link rel="stylesheet" type="text/css" href="css/jquery-editable-select.css">
+	</head>
+
+	<body>
+		<form action="#" method="get">
+			<div>
+				<select id="editable-select" name="stest">
+				    <option value="1a">Alfa Romeo</option>
+				    <option value="2b">Audi</option>
+				    <option value="3c">BMW</option>
+				    <option value="4d">Citroen</option>
+				</select>
+			</div>
+			<button type="submit">提交</button>
+		</form>
+	</body>
+	<script>
+
+		$(function () {
+			$('#editable-select').editableSelect();
+			alert("bbb");
+		});
+
+</script>
+
+
+</html>

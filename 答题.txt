@@ -10,6 +10,8 @@
  	并且被private final 修饰了，被final修饰的字段创建以后就不可以更改。
 
  3.HashMap的实现原理
+  RP：
+
 
  4，写出三种单例模式，如果能考虑线程安全最好
   RP:(1).懒汉式（非线程安全）
@@ -73,12 +75,22 @@
  	lock：需要显示指定起始位置和终止位置。一般使用ReentrantLock类做为锁，多个线程中必须要使用一个ReentrantLock类做为对象才能保证锁的生效。且在加锁和解锁处需要通过lock()和unlock()显示指出。所以一般会在finally块中写unlock()以防死锁。
 
 9，数据库隔离级别有哪些，各自的含义是什么，MYSQL默认的隔离级别是是什么。
- RP:
+ RP:1.读未提交：会读到其他事物未提交的数据，会发生脏读、不可重复读、幻读。
+    2.读已提交：读到其他事物已提交的数据，可避免脏读，但会发生不可重复读、幻读。
+    3.可重复读：可以重复读取得到相同数据，避免了脏读、不可重复读、幻读。
+    4.串行化：  完全串行化的读，每次读都需要获得表级共享锁，读写相互都会阻塞.
+    MYSQL默认隔离级别是可重复读。
+
 
 10，请解释如下jvm参数的含义：
 -server -Xms512m -Xmx512m -Xss1024K 
 -XX:PermSize=256m -XX:MaxPermSize=512m -XX:MaxTenuringThreshold=20 XX:CMSInitiatingOccupancyFraction=80 -XX:+UseCMSInitiatingOccupancyOnly。
- RP:
+ RP:（1） -server -Xms512m -Xmx512m -Xss1024K ：
+          启动JVM时的初始堆大小为512m,堆空间最大值为512m,设置每个线程堆栈大小为1024k.
+    （2） -XX:PermSize=256m -XX:MaxPermSize=512m -XX:MaxTenuringThreshold=20 XX:CMSInitiatingOccupancyFraction=80 -XX:+UseCMSInitiatingOccupancyOnly :
+          启动JVM时的初始永久代大小为256m,永久代空间最大值为512m,对象晋升老年代年龄阈值为20,
+          使用cms作为垃圾回收使用80％后开始CMS收集,使用手动定义初始化定义开始CMS收集。
+
 
 
 
