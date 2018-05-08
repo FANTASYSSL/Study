@@ -1,4 +1,4 @@
-1.1，什么是线程安全
+1.什么是线程安全
  RP:在多线程环境下，对某个方法或者某个实例的调用，能正确处理多个线程间的共享变量.实际上多个线程对
  	共享资源的写的操作时会产生线程安全问题。
 
@@ -9,11 +9,16 @@
  	而字符串的值并没改变，不可变说的是字符串值不可变；原因在于String 底层使用char数组实现，
  	并且被private final 修饰了，被final修饰的字段创建以后就不可以更改。
 
- 3.HashMap的实现原理
-  RP：
+3.HashMap的实现原理
+  RP：通过hash的方法，通过put和get存储和获取对象。存储对象时，我们将K/V传给put方法时，
+	它调用hashCode计算hash从而得到bucket位置，进一步存储，HashMap会根据当前bucket的占用
+	情况自动调整容量(超过Load Facotr则resize为原来的2倍)。获取对象时，我们将K传给get，它
+	调用hashCode计算hash从而得到bucket位置，并进一步调用equals()方法确定键值对。如果发生
+	碰撞的时候，Hashmap通过链表将产生碰撞冲突的元素组织起来，在Java8中，如果一个bucket中
+	碰撞冲突的元素超过某个限制(默认是8)，则使用红黑树来替换链表，从而提高速度。
 
 
- 4，写出三种单例模式，如果能考虑线程安全最好
+4，写出三种单例模式，如果能考虑线程安全最好
   RP:(1).懒汉式（非线程安全）
   		public class Singleton {
   			private Singleton(){}
@@ -71,7 +76,8 @@
  	其中程序计算器与虚拟机栈是线程私有，其他内存区域线程共享。
 
 8，Lock与Synchronized的区别
- RP:synchronized：在需要同步的对象中加入此控制，synchronized可以加在方法上，也可以加在特定代码块中，括号中表示需要锁的对象。
+	RP:synchronized：在需要同步的对象中加入此控制，synchronized可以加在方法上，也可以加在特定代码块中，
+	括号中表示需要锁的对象。
  	lock：需要显示指定起始位置和终止位置。一般使用ReentrantLock类做为锁，多个线程中必须要使用一个ReentrantLock类做为对象才能保证锁的生效。且在加锁和解锁处需要通过lock()和unlock()显示指出。所以一般会在finally块中写unlock()以防死锁。
 
 9，数据库隔离级别有哪些，各自的含义是什么，MYSQL默认的隔离级别是是什么。
@@ -86,6 +92,7 @@
 -server -Xms512m -Xmx512m -Xss1024K 
 -XX:PermSize=256m -XX:MaxPermSize=512m -XX:MaxTenuringThreshold=20 XX:CMSInitiatingOccupancyFraction=80 -XX:+UseCMSInitiatingOccupancyOnly。
  RP:（1） -server -Xms512m -Xmx512m -Xss1024K ：
+		  调整服务器为server模式；
           启动JVM时的初始堆大小为512m,堆空间最大值为512m,设置每个线程堆栈大小为1024k.
     （2） -XX:PermSize=256m -XX:MaxPermSize=512m -XX:MaxTenuringThreshold=20 XX:CMSInitiatingOccupancyFraction=80 -XX:+UseCMSInitiatingOccupancyOnly :
           启动JVM时的初始永久代大小为256m,永久代空间最大值为512m,对象晋升老年代年龄阈值为20,

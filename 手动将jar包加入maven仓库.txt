@@ -1,0 +1,1 @@
+mvn install:install-file -Dfile=D:\Google_download\com.springsource.org.apache.oro-2.0.8.jar -DgroupId=org.apache.oro -DartifactId=com.springsource.org.apache.oro -Dversion=2.0.8 -Dpackaging=jar
