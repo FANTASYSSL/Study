@@ -1,1 +1,6 @@
-mvn install:install-file -Dfile=D:\Google_download\com.springsource.org.apache.oro-2.0.8.jar -DgroupId=org.apache.oro -DartifactId=com.springsource.org.apache.oro -Dversion=2.0.8 -Dpackaging=jar
+Maven 安装 JAR 包的命令是：
+
+mvn install:install-file -Dfile=jar包的位置 -DgroupId=上面的groupId -DartifactId=上面的artifactId -Dversion=上面的version -Dpackaging=jar
+
+eg:
+	mvn install:install-file -Dfile=D:\Google_download\com.springsource.org.apache.oro-2.0.8.jar 	-DgroupId=org.apache.oro -DartifactId=com.springsource.org.apache.oro -Dversion=2.0.8 -Dpackaging=jar
