@@ -1,0 +1,44 @@
+
+支付宝退款：
+   第一次退款：
+		{
+		    "alipay_trade_refund_response":
+		    {
+		        "code": "10000",
+		        "msg": "Success",
+		        "buyer_logon_id": "vwv***@sandbox.com",
+		        "buyer_user_id": "2088102175846262",
+		        "fund_change": "Y",
+		        "gmt_refund_pay": "2018-06-11 00:08:06",
+		        "out_trade_no": "0000000000000000188",
+		        "refund_fee": "0.01",
+		        "send_back_fee": "0.00",
+		        "trade_no": "2018061021001004260200464662"
+		    },
+		    "sign": "rRo4jsi9/BdCyW335uIVXuEcBa5oG9MXnQ/+dltbJQAqfVKdQ77mxi94U6ahXG1AlvOktF3kAk1/0WoherXM5kxnuTNEDlbQJSnIl9OMgg0fjjlEUo0DlZ192LAsGLqakYkZHi2KRzbsBmKqgM//9kmjE37qLwH9xQIQ64QquN/ZfwIlsCVsNWYV8huyDqNhZN4jGaVBDxhZ1hwwP3vi4cMoslzCKlt67rpxg2iAIR9On/8CItGyVLRmGPjuZTlmFhKlCE2Ul+CHw6yWxWvSnXmfwR9LXWZRrpYivhJnRwfgg0fiAwV3AS0XfUgpLZkRJ8nwFYJN7QW98/hwSjBrcQ=="
+		}
+
+	重复退款：
+		{
+		    "alipay_trade_refund_response":
+		    {
+		        "code": "10000",
+		        "msg": "Success",
+		        "buyer_logon_id": "vwv***@sandbox.com",
+		        "buyer_user_id": "2088102175846262",
+		        "fund_change": "N",
+		        "gmt_refund_pay": "2018-06-11 00:08:06",
+		        "out_trade_no": "0000000000000000188",
+		        "refund_fee": "0.01",
+		        "send_back_fee": "0.00",
+		        "trade_no": "2018061021001004260200464662"
+		    },
+		    "sign": "F4odfGsoXSR5bUVYr2YxZs6SkQyGbdh+9vxMpQZ9N63KjB3QK1oebpIYGSU/U8Q4AwFvNa6v8hiOd6ZdpVZ2bbnuFOilVIdfd5Dv8T3iccbAFI6ANsRwnwnfi2EFtWXyk/U2b2AzzzLIkQ0lHMYR6kv9F9T9qnW9bfukMmSRDso+E/jr/gakLi3plztknLXmPy1Z1pwmFJWnNgT/wpVeOFzKUmUamWV4MhKSANd69xXf+MW/YOx9J/IwIJHim9WaBNsGRm7bhvTmwzLtMa7nxT4No9dE27KwJ6BFKzCECZuXzMitVxRCOr6F78gyBFT44FHARBMNJR59tnW91v6JHA=="
+		}
+
+
+
+
+
+
+
