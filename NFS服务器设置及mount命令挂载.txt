@@ -76,3 +76,11 @@ Export list for 192.168.0.169:
 You have new mail in /var/spool/mail/root
 
 mount -t nfs 192.168.0.169:/home/opt/RHEL4U5 /mnt/soft
+
+
+
+
+需要挂载的机器需要安装nfs,并启动：
+	1.yum install nfs-utils
+	2.service nfs start
+	3.mount -t nfs 192.168.1.94:/data/ceshi /data/ceshi
