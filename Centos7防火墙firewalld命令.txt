@@ -1,0 +1,34 @@
+***************************************************************************************************
+启动一个服务：systemctl start firewalld.service 
+关闭一个服务：systemctl stop firewalld.service 
+重启一个服务：systemctl restart firewalld.service 
+显示一个服务的状态：systemctl status firewalld.service 
+在开机时启用一个服务：systemctl enable firewalld.service 
+在开机时禁用一个服务：systemctl disable firewalld.service 
+查看服务是否开机启动：systemctl is-enabled firewalld.service;echo $? 
+查看已启动的服务列表：systemctl list-unit-files|grep enabled
+
+***************************************************************************************************
+
+  添加开放端口：eg（8080）
+	##Add
+	firewall-cmd --permanent --zone=public --add-port=8080/tcp
+
+
+一、查看端口开启状态
+	sudo firewall-cmd --query-port=9998/udp
+
+二、开启端口
+	sudo firewall-cmd --add-port=9998/udp --permanent
+	--permanent表示永久生效，重启不会丢失配置。
+
+三、关闭端口
+	sudo firewall-cmd --remove-port=9998/udp --permanent
+
+重新加载配置
+	sudo firewall-cmd --reload
+检查配置是否生效
+	firewall-cmd --zone=public --query-port=8080/tcp
+
+***************************************************************************************************
+

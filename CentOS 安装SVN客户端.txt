@@ -1,0 +1,57 @@
+1、检查是已经安装了svn：
+# rpm -qa subversion
+subversion-1.7.14-6.el7.x86_64
+
+卸载旧版本的svn：
+# yum remove subversion
+然后再检查是否已经下载成功： # rpm -qa subversion
+
+2、检查yum是否有最新版的安装版本：
+# yum list | grep subversion
+
+如果不是最新版本：
+创建一个yum repo文件：
+# vi /etc/yum.repos.d/wandisco-svn.repo
+添加内容：
+[WandiscoSVN]
+name=Wandisco SVN Repo
+baseurl=http://opensource.wandisco.com/centos/7/svn-1.8/RPMS/$basearch/
+enabled=1
+gpgcheck=0
+3、测试配置是否可用：
+# yum list | grep subversion
+
+如果出现错误： [Errno 14] curl#6 - "Couldn't resolve host ..."
+则添加一个域名服务器：
+# vi /etc/resolv.conf
+添加一条：
+nameserver 8.8.8.8
+
+# yum clean all
+
+4、开始安装
+# yum install subversion
+
+如果出现这个错误提示：
+错误：软件包：subversion-1.8.11-1.x86_64 (WandiscoSVN)
+          需要：libserf-1.so.0()(64bit)
+则先安装：
+# yum install epel-release
+
+继续尝试安装：# yum install subversion，
+如果出现下面的错误：
+Transaction Check Error:
+... conflicts with file from package subversion-libs-1.7.14-7.el7_0.x86_64
+则先运行（删除冲突的安装包）：
+# rpm -e subversion-libs-1.7.14-7.el7_0.x86_64
+
+然后再安装：
+# yum install subversion
+
+5、安装成功：
+# svn --help
+用法: svn <subcommand> [options] [args]
+Subversion 命令行客户端，版本 1.8.11。
+使用“svn help <subcommand>” 显示子命令的帮助信息。
+使用“svn --version”查看程序的版本号和版本库访问模块，或者
+使用“svn --version --quiet”只查看程序的版本号。
