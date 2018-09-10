@@ -1,0 +1,126 @@
+1.下载elk-docker：
+	docker pull sebp/elk
+
+2. 修改虚拟内存：
+	vim /etc/sysc
+	vm.max_map_count = 262144
+	查看：sysctl -p
+
+3.启动：
+	docker run -p 5601:5601 -p 9200:9200 -p 5044:5044 -it -e TZ="Asia/Shanghai" --name elk sebp/elk
+	设置容器时区：Asia/Shanghai
+
+4.启动成功后：
+	进入容器：docker exec -it elk /bin/bash
+	安装logstash插件：
+		cd /opt/logstash/bin
+		 ./logstash-plugin install logstash-filter-multiline
+	进入/etc/logstash/conf.d设置配置文件(分开设置)：
+	 	 input {
+			  beats {
+			    port => 5044
+			    client_inactivity_timeout => 36000
+
+			    #ssl => true
+			    #ssl_certificate => "/etc/pki/tls/certs/logstash-beats.crt"
+			    #ssl_key => "/etc/pki/tls/private/logstash-beats.key"
+			  }
+			}
+		filter {
+		    multiline {
+		      patterns_dir => "/opt/logstash/patterns"
+		      pattern => "(^%{TIMESTAMP_ISO8601})|(^%{CATALINA_DATESTAMP})"
+		      negate => true
+		      what => "previous"
+		    }
+
+		   if "tomcat" in [tags]{
+		     grok {
+		        patterns_dir => "/opt/logstash/patterns"
+		        match => ["message","%{TIMESTAMP_ISO8601:timestamp}\s+%{LOGLEVEL:level}\s+%{GREEDYDATA:content}"]
+		        remove_field => ["message"]
+		     }
+		   }
+
+		   if "fat_jar" in [tags]{
+		     grok {
+		        patterns_dir => "/opt/logstash/patterns"
+		        match => ["message","%{TIMESTAMP_ISO8601:timestamp}\s+%{LOGLEVEL:level}\s+%{POSINT:process-id}\s+%{GREEDYDATA:content}"]
+		        remove_field => ["message"]
+		      }
+		    }
+
+		   if "_grokparsefailure" in [tags] {
+		      drop { }
+		    }
+
+		    date {
+		        match => ["timestamp", "yyyy-MM-dd HH:mm:ss.SSS"]
+		        #match => ["timestamp", "YYYY-MM-dd HH:mm:ss"]
+		        #timezone => "+00:00" 
+		        target => "@timestamp"
+		    }
+
+		    #mutate {
+		    #    remove_field => ["timestamp"]
+		    #}
+		}
+		output {
+
+		  #if [fields][log_source] == "paymentPlatform" {
+		  #    elasticsearch {
+		  #      hosts => ["localhost"]
+		  #
+		  #      #index => "%{[@metadata][beat]}-%{+YYYY.MM.dd}"
+		  #      #document_type => "%{[@metadata][type]}"
+		  #
+		  #      index => "paymentplatform-%{+YYYY.MM.dd}"
+		  #    }
+		  #  }
+
+		    elasticsearch {
+		        hosts => ["localhost"]
+		        index => "%{[fields][log_source]}-%{+YYYY.MM.dd}"
+		      }
+
+			}		
+
+	5.在需要收集日志的机器上安装filebeat：
+		-解压：filebeat-6.3.2-linux-x86_64.tar.gzfil
+		-改名：mv filebeat-6.3.2-linux-x86_64.tar.gzfil filebeat
+		-编辑：进入解压文件目录，编辑filebeat.yml文件，如下
+				 - type: log
+					  enabled: true
+					  paths:
+					    - /usr/local/tomcat-service-web/logs/catalina.out.*
+					  fields:
+					    log_source: zhucai-service-web
+					  tags: ["tomcat"]
+				注： 可添加多个type，一个type意味着收集一个目录下的日志，可以使用通配符
+
+				其次注释掉Elasticsearch output下的配置，将Logstash output下hosts放开，
+				两个output配置不能同时使用，只能选其一，hosts中的地址只能填写域名。
+
+		-启动filebeat：./filebeat -e -c filebeat.yml
+
+	6.打开 http://ip:5601 查看索引文件
+
+	7.es日志定期清理.
+		-del_index.sh 脚本
+		-del_index2.sh 脚本
+		-添加定时任务：
+			vim /etc/crontab
+			  添加如下内容：
+			  	#00 02 * * *   root    sh /del_index.sh &> /dev/null
+				00 02 * * *   root     ./del_index2.sh >> del_index2.log &
+
+	8.filebeat 快速启动脚本.
+		-fb-start.sh 脚本
+
+
+
+注：
+	临时后台启动方式：  nohup ./filebeat -e -c filebeat.yml &
+
+参考：1.https://elk-docker.readthedocs.io/
+	 2.https://www.cnblogs.com/soar1688/p/6849183.html
