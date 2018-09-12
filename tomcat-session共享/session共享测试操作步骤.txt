@@ -1,0 +1,16 @@
+一，测试使用自定Tomcat方式共享session
+	-两个传统Tomcat
+		8091 8092
+	-两个自定义springboot项目
+		8080 8081
+
+	首先分别测试两组session共享，然后组合测试
+
+二. 使用Redis共享session测试
+	-修改两个Tomcat配置，使用Redis方式
+		8091 8092
+	-将传统Tomcat组合springboot项目测试
+		8082 8083
+
+
+

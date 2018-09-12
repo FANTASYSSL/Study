@@ -1,0 +1,21 @@
+参考文档
+https://www.cnblogs.com/h--d/p/6729172.html
+
+通过maven库获取jar包，版本依赖maven ，见pom.xml
+最新2.3.0
+
+使用的配置
+
+
+	<Manager       
+	        className="de.javakaffee.web.msm.MemcachedBackupSessionManager" 
+	        memcachedNodes="n1:127.0.0.1:11211" 
+	        sticky="false" 
+	        sessionBackupAsync="false" 
+	        transcoderFactoryClass="de.javakaffee.web.msm.serializer.kryo.KryoTranscoderFactory" 
+	      />
+
+
+注意去掉原文中的requestUriIgnorePattern=".*\.(ico|png|gif|jpg|jpeg|bmp|css|js)$" 
+否则会因为静态资源和网站动态部分的SESSION不同 造成登录丢失
+注意这里没有改memcahced的连接地址
