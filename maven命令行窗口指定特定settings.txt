@@ -1,0 +1,14 @@
+在命令行界面指定settings.xml，命令如下：
+
+	mvn install --settings c:\user\settings.xml 
+
+例如：
+
+	mvn clean package --settings F:\Maven\settings.xml -Dmaven.test.skip=true
+
+	mvn deploy --settings F:\Maven\settings.xml -Dmaven.test.skip=true
+
+
+
+
+
