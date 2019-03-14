@@ -6,7 +6,7 @@
 
 	mvn clean package --settings F:\Maven\settings.xml -Dmaven.test.skip=true
 
-	mvn deploy --settings F:\Maven\settings.xml -Dmaven.test.skip=true
+	mvn deploy --settings D:\TOOL\apache-maven-3.3.9\conf\settings_zc.xml -Dmaven.test.skip=true
 
 
 
