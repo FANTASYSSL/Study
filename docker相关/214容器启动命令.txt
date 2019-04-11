@@ -23,6 +23,12 @@
 
 	activemq:
 		docker run -p 61616:61616 -p 8161:8161 -d webcenter/activemq:latest
+	rabbitmq:
+		docker -run -d -p 5682:5672 -p 15682:15672 --name rabbitmq rabbitmq:latest
+		无法访问web界面：1.进入 : docker exec -it rabbitmq /bin/bash
+						2.执行 : rabbitmq-plugins enable rabbitmq_management
+						再次访问试试
+
 	zookeeper：
 		docker run -p 2181:2181 -d zookeeper:latest
 	使用客户端测试链接zookeeper（compassionate_cray为容器name）：
