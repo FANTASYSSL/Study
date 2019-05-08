@@ -1,0 +1,44 @@
+一、下载镜像
+docker Hub官网URL：https://hub.docker.com/_/mysql/
+下载最新版本：docker pull mysql 
+下载指定版本：docker pull mysql:verison(8.0.11，8.0，8)
+二、启动镜像
+docker run  -d --name mysql -v /data/datadir:/var/lib/mysql -v /etc/mysql/my.cnf:/etc/mysql/my.cnf -p 3306:3306 -e MYSQL_ROOT_PASSWORD=123456 mysql:tag
+
+没有/data/datadir路径或/etc/mysql/my.cnf配置文件，可以使用默认，不需挂载
+三、用户授权
+1、登录已启动的MySQL容器
+docker exec -it mysql /bin/sh
+2、使用启动命令中-e MYSQL_ROOT_PASSWORD设置的密码，登录MySQL
+mysql -uroot -p
+3、执行授权命令，此处已root用户为例
+create user root@'192.168.0.2' identified by '123456';
+grant all privileges on databas_name.* to root@'192.168.0.2';
+ALTER USER 'root'@'192.168.0.2' IDENTIFIED WITH mysql_native_password BY '123456';
+FLUSH PRIVILEGES;
+4、登录MySQL
+mysql -h 192.168.0.2 -u root -p
+四、启动命令中的环境变量
+在启动mysql映像时，您可以通过在docker run命令行上传递一个或多个环境变量来调整MySQL实例的配置。请注意，如果您使用已包含数据库的数据目录启动容器，则下面的任何变量都不会产生任何影响：任何预先存在的数据库在容器启动时始终保持不变。
+
+另请参阅https://dev.mysql.com/doc/refman/5.7/en/environment-variables.html以了解MySQL本身遵守的环境变量的文档（特别是像这样的变量MYSQL_HOST，这些变量在与此映像一起使用时会导致出现问题）。
+
+MYSQL_ROOT_PASSWORD
+该变量是强制性的，并指定将为MySQL root超级用户帐户设置的密码。在上面的例子中，它被设置为my-secret-pw。
+
+MYSQL_DATABASE
+此变量是可选的，并允许您指定要在映像启动时创建的数据库的名称。如果提供了用户/密码（见下文），那么该用户将被授予对该数据库的超级用户访问（对应于GRANT ALL）。
+
+MYSQL_USER， MYSQL_PASSWORD
+这些变量是可选的，可用于创建新用户并设置该用户的密码。该用户将被授予超级用户权限（见上文），该权限由MYSQL_DATABASE变量指定。这两个变量都是创建用户所必需的。
+
+请注意，不需要使用此机制来创建超级用户的root用户，该用户默认情况下会使用MYSQL_ROOT_PASSWORD变量指定的密码创建。
+
+MYSQL_ALLOW_EMPTY_PASSWORD
+这是一个可选变量。设置为yes允许容器以root用户的空密码启动。注意：yes除非您真的知道您在做什么，否则不要将此变量设置为“不推荐”，因为这将使您的MySQL实例完全不受保护，从而允许任何人获得完整的超级用户访问权限。
+
+MYSQL_RANDOM_ROOT_PASSWORD
+这是一个可选变量。设置yes为为root用户（使用pwgen）生成随机初始密码。生成的root密码将打印到stdout（GENERATED ROOT PASSWORD: .....）。
+
+MYSQL_ONETIME_PASSWORD
+一旦初始化完成，将root用户（不是用户指定的用户MYSQL_USER）设置为已过期，强制首次登录时更改密码。注：该功能仅在MySQL 5.6+上受支持。在MySQL 5.5上使用此选项将在初始化期间引发相应的错误。

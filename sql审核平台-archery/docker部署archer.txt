@@ -1,0 +1,42 @@
+docker run --name archer -v /local_path/settings.py:/opt/archer/settings.py  -e NGINX_PORT=9123 -p 9123:9123 -dti hhyo/archer
+
+
+docker run --name archer -v /opt/archer/settings.py:/opt/archer/archer/settings.py  -e NGINX_PORT=9123 -p 9123:9123 -dti hhyo/archer
+
+
+docker run --name archery -v /opt/archer/settings.py:/opt/archery/archery/settings.py  -e NGINX_PORT=9123 -p 9123:9123 -dti hhyo/archery
+
+
+
+docker run --name archer2 -v /opt/archer/settings.py:/opt/archer/archer/settings.py  -e NGINX_PORT=80 -p 9124:9123 -dti hhyo/archer
+
+
+
+docker run --name archer2 -v /opt/archer/settings.py:/opt/archer/archer/settings.py  -p 9124:9123 -dti hhyo/archer
+
+
+docker run --name inception -v /opt/archer/inc.cnf:/etc/inc.cnf  -p 6669:6669 -dti hhyo/inception
+
+
+
+docker run -p 3308:3306 -e MYSQL_ROOT_PASSWORD="iMGa%XjLEm" --name mysql -d mysql:latest --character-set-server=utf8 --collation-server=utf8_general_ci
+
+
+
+GRANT ALL ON *.* to root@'192.168.0.18' IDENTIFIED BY 'A12345a~!';
+
+
+
+create user 'root'@'192.168.0.%' identified by 'A12345a~!';
+
+
+ALTER USER 'root'@'192.168.0.%' IDENTIFIED WITH mysql_native_password BY 'iMGa%XjLEm';
+
+
+FLUSH PRIVILEGES;
+
+
+docker run -p 3309:3306 -e MYSQL_ROOT_PASSWORD="root" --name mysql -d mysql:5.7 --character-set-server=utf8 --collation-server=utf8_general_ci
+
+docker run -p 3309:3306 -v ./mysql3309/my.cnf:/etc/mysql/my.cnf -v ./mysql3309/data:/var/lib/mysql -e MYSQL_ROOT_PASSWORD="root" --name mysql3309 -d mysql:5.7 --character-set-server=utf8 --collation-server=utf8_general_ci
+
