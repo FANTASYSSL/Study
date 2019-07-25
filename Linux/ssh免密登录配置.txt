@@ -28,7 +28,7 @@
 	
 	现在就可以直接ssh user@node1来访问node1主机了，第一次会提示yes or no，直接回车即可
 
-	ssh-copy-id -i user@node1就是将本机的公钥插入到远程主机node1的用户user的authorized_keys文件中
+	ssh-copy-id -i （-p加上端口默认22） user@node1 就是将本机的公钥插入到远程主机node1的用户user的authorized_keys文件中
 	所以也可以手动通过scp将自己的公钥复制到远程主机，然后再将其手机复制到远程主机authorized_keys文件的结尾
 
 	如果需要反向访问，就需要从远程主机上进行相同的操作

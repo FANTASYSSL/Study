@@ -38,5 +38,4 @@ FLUSH PRIVILEGES;
 
 docker run -p 3309:3306 -e MYSQL_ROOT_PASSWORD="root" --name mysql -d mysql:5.7 --character-set-server=utf8 --collation-server=utf8_general_ci
 
-docker run -p 3309:3306 -v ./mysql3309/my.cnf:/etc/mysql/my.cnf -v ./mysql3309/data:/var/lib/mysql -e MYSQL_ROOT_PASSWORD="root" --name mysql3309 -d mysql:5.7 --character-set-server=utf8 --collation-server=utf8_general_ci
 
