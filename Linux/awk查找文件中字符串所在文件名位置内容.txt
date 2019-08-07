@@ -1,0 +1,6 @@
+awk '/Exception/{print  FILENAME,NR,$0}' ./*
+
+
+
+
+
