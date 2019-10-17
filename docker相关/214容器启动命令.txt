@@ -4,10 +4,10 @@
 		docker run -p 3306:3306 -v=/data/mysql/conf/my.cnf:/etc/mysql/my.cnf -v=/data/mysql/data:/var/lib/mysql -e MYSQL_ROOT_PASSWORD="root" --name zhucai-mysql -d mysql:5.7 --character-set-server=utf8 --collation-server=utf8_general_ci
 		#docker run -p 3306:3306 -e MYSQL_USER="test" -e MYSQL_PASSWORD="123456" -e MYSQL_ROOT_PASSWORD="root" --name zhucai-mysql -d mysql:5.7 --character-set-server=utf8 --collation-server=utf8_general_ci
 	redis:
-		docker run -p 13679:6379 -v /data/redis:/data -d redis:latest redis-server --appendonly yes --requirepass "1234567"
+		docker run -p 13679:6379 -v /data/redis:/data --name zhucai-redis -d redis:latest redis-server --appendonly yes --requirepass "1234567"
 		docker run -p 6379:6379 -v /data/redis_mall:/data -d redis:latest redis-server --appendonly yes --requirepass "1234567"
 	mongodb:
-		docker run -p 27017:27017 -v /data/mongoDB:/data/db -d mongo:3.4
+		docker run -p 27017:27017 -v /data/mongoDB:/data/db --name zhucai-mongoDB -d mongo:3.4
 		执行命令：
 			1.docker exec -it zhucai-mongoDB /bin/bash （进入容器）
 			2.输入：	mongo -->> use admin 
@@ -22,16 +22,18 @@
 					#db.adminCommand({renameCollection: "zhucai.zhucai", to: "zhucai-analysis.test"})
 
 	activemq:
-		docker run -p 61616:61616 -p 8161:8161 -d webcenter/activemq:latest
+		docker run -p 61616:61616 -p 8161:8161 --name zhucai-activemq -d webcenter/activemq:latest
 	rabbitmq:
-		docker -run -d -p 5682:5672 -p 15682:15672 --name rabbitmq rabbitmq:latest
+		docker -run -p 5682:5672 -p 15682:15672 --name rabbitmq -d rabbitmq:latest
 		( --hostname test213 可能需要指定主机名 有待验证)
 		无法访问web界面：1.进入 : docker exec -it rabbitmq /bin/bash
 						2.执行 : rabbitmq-plugins enable rabbitmq_management
 						再次访问试试
+		new:docker run -itd --name rabbitmq -v /data/rabbitmq/etc/rabbitmq:/etc/rabbitmq -v /data/rabbitmq/lib/rabbitmq:/var/lib/rabbitmq -v /data/rabbitmq/log/rabbitmq/:/var/log/rabbitmq -p 1884:1883 -p 5673:5672 -p 15673:15672 -p 25673:25672 -p 61614:61613 docker.io/rabbitmq:3-management
+
 
 	zookeeper：
-		docker run -p 2181:2181 -d zookeeper:latest
+		docker run -p 2181:2181 --name zhucai-zookeeper -d zookeeper:latest
 	使用客户端测试链接zookeeper（compassionate_cray为容器name）：
 	    docker run -it --rm --link compassionate_cray:zookeeper  zookeeper zkCli.sh -server zookeeper
 
