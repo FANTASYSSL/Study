@@ -46,6 +46,8 @@
 
 ==============================================================================
 
+使用dockerd  可以准确诊断docker出现的问题
+==============================================================================
 
 docker start zhucai-mysql zhucai-mongoDB zhucai-activemq zhucai-zookeeper apollo-mysql zhucai-redis apollo-all-in-one
 
@@ -56,4 +58,6 @@ docker start w_redis w_rabbitmq mall_test_redis rabbitmq mall_dev_redis
 
 
 docker stop w_redis w_rabbitmq mall_test_redis rabbitmq mall_dev_redis
+
+
 
