@@ -1,0 +1,31 @@
+链接：https://docs.docker.com/install/linux/docker-ce/centos/
+
+I.在新主机上首次安装Docker Engine-Community之前，需要设置Docker存储库。之后，您可以从存储库安装和更新Docker。
+ 设置存储库安装.
+ 	1.安装所需的软件包。yum-utils提供了yum-config-manager效用，
+ 	  并device-mapper-persistent-data和lvm2由需要devicemapper存储驱动程序。
+
+		$ sudo yum install -y yum-utils \
+		  device-mapper-persistent-data \
+		  lvm2
+
+	2.使用以下命令来设置稳定的存储库。
+
+		$ sudo yum-config-manager \
+		    --add-repo \
+		    https://download.docker.com/linux/centos/docker-ce.repo
+
+
+II.安装DOCKER ENGINE-社区：
+	1.安装最新版本的Docker Engine-Community和containerd，或者转到下一步安装特定版本：
+			$ sudo yum install docker-ce docker-ce-cli containerd.io
+	2.要安装特定版本的Docker Engine-Community，请在存储库中列出可用版本，然后选择并安装：
+			$ yum list docker-ce --showduplicates | sort -r
+		b.通过其完全合格的软件包名称安装特定版本，该软件包名称是软件包名称（docker-ce）加上版本字符串（第二列），从第一个冒号（:）一直到第一个连字符，并用连字符（-）分隔。例如，docker-ce-18.09.1。
+			$ sudo yum install docker-ce-<VERSION_STRING> docker-ce-cli-<VERSION_STRING> containerd.io
+	3.启动Docker。
+			$ sudo systemctl start docker
+
+
+
+
