@@ -1,0 +1,34 @@
+sudo mkdir -p /etc/docker
+
+sudo tee /etc/docker/daemon.json <<-'EOF'
+{
+    "registry-mirrors": [
+        "https://1nj0zren.mirror.aliyuncs.com",
+        "https://docker.mirrors.ustc.edu.cn",
+        "http://f1361db2.m.daocloud.io",
+        "https://registry.docker-cn.com"
+    ]
+}
+EOF
+sudo systemctl daemon-reload
+sudo systemctl restart docker
+
+
+链接：https://juejin.im/post/5cd2cf01f265da0374189441
+
+====================== or ======================================================
+
+{
+  "registry-mirrors": [
+  	"https://0h9lca7j.mirror.aliyuncs.com",
+  	"https://dockerhub.azk8s.cn",
+    "https://reg-mirror.qiniu.com"
+    ]
+}
+
+
+
+
+
+
+
