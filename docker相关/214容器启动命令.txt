@@ -8,8 +8,12 @@
 
 		
 	redis:
-		docker run -p 13679:6379 -v /data/redis:/data --name zhucai-redis -d redis:latest redis-server --appendonly yes --requirepass "1234567"
+		docker run -p 13679:6379 -v /data/redis:/data --name zhucai-redis -d redis:latest redis-server --appendonly yes --requirepass "1234567" --restart=always
 		docker run -p 6379:6379 -v /data/redis_mall:/data -d redis:latest redis-server --appendonly yes --requirepass "1234567"
+*** 加上 --restart=always docker服务重启后自动重启容器
+*** 如果已经启动了则可以使用如下命令：
+	   docker update --restart=always <CONTAINER ID>
+
 	mongodb:
 		docker run -p 27017:27017 -v /data/mongoDB:/data/db --name zhucai-mongoDB -d mongo:3.4
 		执行命令：
