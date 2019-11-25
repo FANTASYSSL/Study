@@ -1,0 +1,42 @@
+version: '2.2'
+services:
+  apollo:
+    container_name: apollo-all-in-one
+    image: idoop/docker-apollo:latest
+    restart: always
+    # portal若出现504错误,则将网络模式改为host. host模式下如果想改端口,参考下方修改端口的环境变量
+    network_mode: "host"
+    # volumes:
+      # 如果需要查看日志,挂载容器中的/opt路径出来即可.
+    #  - ./logs:/opt
+      # 如果portal需要开启ldap或ad域验证,须挂载此ldap配置文件
+    #  - ./application-ldap.yml:/apollo-portal/config/application-ldap.yml:ro
+    environment:
+      # 开启Portal,默认端口: 8070
+      PORTAL_DB: jdbc:mysql://192.168.1.214:23306/apolloportaldb?characterEncoding=utf8
+      PORTAL_DB_USER: root
+      PORTAL_DB_PWD: root
+      PORTAL_PORT: 8070
+      # 如果portal需要开启ldap或ad域验证,须设置该环境变量为TRUE
+      #PORTAL_LDAP: "TRUE"
+      
+      # 开启dev环境, 默认端口: config 8080, admin 8090
+      DEV_DB: jdbc:mysql://192.168.1.214:23306/apolloconfig_devdb?characterEncoding=utf8
+      DEV_DB_USER: root
+      DEV_DB_PWD: root
+      DEV_CONFIG_PORT: 8080
+      DEV_ADMIN_PORT: 8090
+
+      # 开启fat环境, 默认端口: config 8081, admin 8091
+      FAT_DB: jdbc:mysql://192.168.1.214:23306/apolloconfig_fatdb?characterEncoding=utf8
+      FAT_DB_USER: root
+      FAT_DB_PWD: root
+      # 若network_mode为host,则可修改端口,如下:
+      FAT_CONFIG_PORT: 8180
+      FAT_ADMIN_PORT: 8190
+           
+      # 指定远程uat地址
+      #UAT_URL: http://192.168.1.2:8080
+      
+      # 指定远程pro地址
+      #PRO_URL: http://www.example.com:8080
