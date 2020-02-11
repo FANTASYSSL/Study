@@ -1,0 +1,6 @@
+redis-cli -h 127.0.0.1 -p 6379 -a 1234567 keys 'SKU*' | xargs  redis-cli -h 127.0.0.1 -p 6379 -a 1234567 del
+
+
+redis-cli -h 127.0.0.1 -p 6379 -a 123321 keys 'cart_mid*' | xargs  redis-cli -h 127.0.0.1 -p 6379 -a 123321 del
+
+
