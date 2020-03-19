@@ -64,4 +64,6 @@ docker start w_redis w_rabbitmq mall_test_redis rabbitmq mall_dev_redis
 docker stop w_redis w_rabbitmq mall_test_redis rabbitmq mall_dev_redis
 
 
+[root@S9 ~]# systemctl daemon-reload
+[root@S9 ~]# systemctl restart docker.service 
 
