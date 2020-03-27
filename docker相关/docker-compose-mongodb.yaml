@@ -1,0 +1,15 @@
+version: '2.2'
+services:
+  mongodb:
+    image: mongo:3.4
+    container_name: zhucai-mongodb
+    restart: always
+    ports:
+      - 27017:27017
+    volumes:
+      - /data/mongoDB:/data/db
+    networks:
+      - zhucai 
+
+networks:
+  zhucai:

@@ -8,7 +8,7 @@
 
 		
 	redis:
-		docker run  -p 13679:6379 -v /data/redis:/data  --name zhucai-redis --restart=always -d redis:latest redis-server --appendonly yes --requirepass "1234567" 
+		docker run -p 13679:6379 -v /data/redis:/data  --name zhucai-redis --restart=always -d redis:latest redis-server --appendonly yes --requirepass "1234567" 
 		docker run -p 6379:6379 -v /data/redis_mall:/data -d redis:latest redis-server --appendonly yes --requirepass "1234567"
 *** 加上 --restart=always docker服务重启后自动重启容器
 *** 如果已经启动了则可以使用如下命令：
@@ -32,7 +32,7 @@
 	activemq:
 		docker run -p 61616:61616 -p 8161:8161 --name zhucai-activemq -d webcenter/activemq:latest
 	rabbitmq:
-		docker -run -p 5682:5672 -p 15682:15672 --name rabbitmq -d rabbitmq:latest
+		docker run -p 5682:5672 -p 15682:15672 --name rabbitmq -d rabbitmq:latest
 		( --hostname test213 可能需要指定主机名 有待验证)
 		无法访问web界面：1.进入 : docker exec -it rabbitmq /bin/bash
 						2.执行 : rabbitmq-plugins enable rabbitmq_management

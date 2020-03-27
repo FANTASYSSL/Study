@@ -1,0 +1,62 @@
+version: '2.2'
+services:
+  apollo-mysql:
+    image: mysql:5.7
+    container_name: apollo-mysql
+    restart: always
+    ports:
+      - 23306:3306
+    volumes:
+      - /data/apollo_mysql/conf/my.cnf:/etc/mysql/my.cnf:ro
+      - /data/apollo_mysql/data:/var/lib/mysql
+    environment:
+      MYSQL_ROOT_PASSWORD: root
+    #command: mysqld --character-set-server=utf8 --collation-server=utf8_general_ci
+    command: ["--character-set-server=utf8",
+                "--collation-server=utf8_general_ci"]
+    networks:
+      - apollo
+
+  zookeeper:
+    image: zookeeper:latest
+    container_name: zhucai-zookeeper
+    restart: always
+    ports:
+      - 2181:2181
+    volumes:
+      - /data/zookeeper/data:/data
+      - /data/zookeeper/datalog:/datalog
+      - /data/zookeeper/logs:/logs
+    networks:
+      - zhucai 
+
+  activemq:
+    image: webcenter/activemq:latest
+    container_name: zhucai-activemq
+    restart: always
+    ports:
+      - 8161:8161
+    networks:
+      - zhucai 
+      
+  redis:
+    image: redis:latest
+    container_name: zhucai-redis
+    restart: always
+    ports:
+      - 16379:6379
+    volumes:
+      - /data/redis:/data
+    command: [
+                "redis-server",
+                "--appendonly",
+                "yes",
+                "--requirepass",
+                "1234567"
+            ]
+    networks:
+      - zhucai 
+
+networks:
+  apollo:
+  zhucai:
