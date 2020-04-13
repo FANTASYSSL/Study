@@ -1,6 +1,25 @@
 Maven 安装 JAR 包的命令是：
 
+
+
+利用命令行:
+
+1). 安装到本地库： 
+mvn install:install-file -DgroupId=org.apache.hadoop -DartifactId=hbase -Dversion=1.0 -Dpackaging=jar -Dfile=[path to file]
+
 mvn install:install-file -Dfile=jar包的位置 -DgroupId=上面的groupId -DartifactId=上面的artifactId -Dversion=上面的version -Dpackaging=jar
 
 eg:
 	mvn install:install-file -Dfile=D:\Google_download\com.springsource.org.apache.oro-2.0.8.jar 	-DgroupId=org.apache.oro -DartifactId=com.springsource.org.apache.oro -Dversion=2.0.8 -Dpackaging=jar
+
+
+2). 安装到私服 
+mvn deploy:deploy-file -DgroupId=org.apache.hadoop -DartifactId=hbase -Dversion=1.0 -Dpackaging=jar -Dfile=[path to file] -Durl=[url] -DrepositoryId=[id]
+
+2.批量导入jar
+
+直接拷贝文件至/opt/data/nexus/sonatype-work/nexus/storage/pvinsight/org/apache/hadoop/hive/hive-exec/0.5.0
+
+或者
+
+通过脚本执行 mvn deploy:deploy-file

@@ -1,0 +1,102 @@
+1.安装docker
+	所有节点都需要安装Docker。
+	apt-get update && apt-get install docker.io
+2.安装kubelet、kubeadm和kubectl
+	在所有节点上安装kubelet、kubeadm和kubectl。
+		kubelet运行在Cluster所有节点上，负责启动Pod和容器。
+		kubeadm用于初始化Cluster。
+		kubectl是Kubernetes命令行工具。通过kubectl可以部署和管理应用，查看各种资源，创建、删除和更新各种组件。
+
+	apt-get update && apt-get install -y apt-transport-https
+
+	curl -s https://packages.cloud.google.com/apt/doc/apt-key.gpg | apt-key add -
+		// 经测试这里可能报错： gpg:no valid OpenPGP data found
+		//注意：需要通过下面两条命令来解决：curl -O https://packages.cloud.google.com/apt/doc/apt-key.gpg 先保存一个apt-key.gpg的文件，再通过apt-key add apt-key.gpg来加载。
+
+	//添加Kubernetes软件源
+	cat <<EOF >/etc/apt/sources.list.d/kubernetes.list
+	deb http://apt.kubernetes.io/ kubernetes-xenial main
+	EOF
+	
+	//上面是官方的源，国内不通需要修改为如下
+	cat <<EOF >/etc/apt/sources.list.d/kubernetes.list
+	deb http://mirrors.ustc.edu.cn/kubernetes/apt kubernetes-xenial main
+	EOF
+
+	apt-get update
+
+	apt-get install -y kubelet kubeadm kubectl
+
+	systemctl enable kubelet
+
+3.用kubeadm创建Cluster
+	完整的官方文档可以参考https://kubernetes.io/docs/setup/independent/create-cluster-kubeadm/
+4.初始化Master
+
+在Master上执行如下命令：
+
+    kubeadm init --apiserver-advertise-address 192.168.56.105
+
+	--pod-network-cidr=10.244.0.0/16 
+
+	--apiserver-advertise-address指明用Master的哪个interface与Cluster的其他节点通信。如果Master有多个interface，建议明确指定，如果不指定，kubeadm会自动选择有默认网关的interface。
+
+	--pod-network-cidr指定Pod网络的范围。Kubernetes支持多种网络方案，而且不同网络方案对--pod-network-cidr有自己的要求，这里设置为10.244.0.0/16是因为我们将使用flannel网络方案，必须设置成这个CIDR。在后面的实践中我们会切换到其他网络方案，比如Canal.
+
+		//不幸的是报错, k8s.gcr.io 被墙了，镜像下载失败
+		//根据报错信息，在国内网站站上找到相关的镜像(docker需要配置阿里云的镜像仓库)
+		docker pull registry.cn-hangzhou.aliyuncs.com/google_containers/kube-controller-manager:v1.17.4
+		docker pull registry.cn-hangzhou.aliyuncs.com/google_containers/kube-scheduler:v1.17.4
+		docker pull registry.cn-hangzhou.aliyuncs.com/google_containers/kube-proxy:v1.17.4
+		docker pull registry.cn-hangzhou.aliyuncs.com/google_containers/pause:3.1
+		docker pull registry.cn-hangzhou.aliyuncs.com/google_containers/etcd:3.4.3-0
+		docker pull registry.cn-hangzhou.aliyuncs.com/google_containers/coredns:1.6.5
+		docker pull registry.cn-hangzhou.aliyuncs.com/google_containers/kube-apiserver:v1.17.4
+		//把这些images重新tag一下。
+		docker tag registry.cn-hangzhou.aliyuncs.com/google_containers/kube-controller-manager:v1.17.4  k8s.gcr.io/kube-controller-manager:v1.17.4
+		docker tag registry.cn-hangzhou.aliyuncs.com/google_containers/kube-scheduler:v1.17.4  k8s.gcr.io/kube-scheduler:v1.17.4
+		docker tag registry.cn-hangzhou.aliyuncs.com/google_containers/kube-proxy:v1.17.4  k8s.gcr.io/kube-proxy:v1.17.4
+		docker tag registry.cn-hangzhou.aliyuncs.com/google_containers/pause:3.1  k8s.gcr.io/pause:3.1
+		docker tag registry.cn-hangzhou.aliyuncs.com/google_containers/etcd:3.4.3-0  k8s.gcr.io/etcd:3.4.3-0
+		docker tag registry.cn-hangzhou.aliyuncs.com/google_containers/coredns:1.6.5  k8s.gcr.io/coredns:1.6.5
+		docker tag registry.cn-hangzhou.aliyuncs.com/google_containers/kube-apiserver:v1.17.4  k8s.gcr.io/kube-apiserver:v1.17.4
+		//重新执行
+
+	kubectl apply -f https://raw.githubusercontent.com/coreos/flannel/master/Documentation/kube-flannel.yml
+
+配置Node：
+	在各个node节点执行如下命令（对应master配置返回的 kubeadm join命令），加入master集群
+	 kubeadm join 10.2.14.78:6443 --token h7u22o.nk23ias5f1ft8hj9 --discovery-token-ca-cert-hash sha256:9f93785608c9a9de3e5d74e9ed30b8302691abfee7efd946a8c1b80d8582fe92
+
+在master查看nodes状态，Node的状态为NotReady 
+	root@wangcf-k8s-m:~# kubectl get nodes
+	NAME            STATUS     ROLES    AGE     VERSION
+	wangcf-k8s-m    Ready      master   20m     v1.13.2
+	wangcf-k8s-n1   NotReady   <none>   8m21s   v1.13.2
+	wangcf-k8s-n2   NotReady   <none>   2m40s   v1.13.2
+
+查看pod状态，部分服务没有正常启动，原因是各个node也缺少镜像，需要手动下载，按照在master手动下载镜像的方式下载即可
+	root@wangcf-k8s-m:~# kubectl get pod --all-namespaces
+	NAMESPACE     NAME                                   READY   STATUS              RESTARTS   AGE
+	kube-system   coredns-86c58d9df4-hpbbh               0/1     ContainerCreating   0          18m
+	kube-system   coredns-86c58d9df4-qj56q               0/1     ContainerCreating   0          18m
+	kube-system   etcd-wangcf-k8s-m                      1/1     Running             2          17m
+	kube-system   kube-apiserver-wangcf-k8s-m            1/1     Running             2          17m
+	kube-system   kube-controller-manager-wangcf-k8s-m   1/1     Running             2          17m
+	kube-system   kube-flannel-ds-amd64-bskks            0/1     Init:0/1            0          2m34s
+	kube-system   kube-flannel-ds-amd64-rdnw2            1/1     Running             0          2m34s
+	kube-system   kube-flannel-ds-amd64-sdbxj            0/1     Init:0/1            0          55s
+	kube-system   kube-proxy-6h6rv                       0/1     ContainerCreating   0          55s
+	kube-system   kube-proxy-fsfwq                       0/1     ContainerCreating   0          6m36s
+	kube-system   kube-proxy-z7dqx                       1/1     Running             2          18m
+	kube-system   kube-scheduler-wangcf-k8s-m            1/1     Running             2          17m
+
+
+
+
+
+记录来自：https://www.jianshu.com/p/c94c59192ce4
+
+
+
+

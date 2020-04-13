@@ -1,0 +1,51 @@
+直接war部署：
+	java -jar jenkins.war --httpPort=9090
+	eg:/usr/lib/jenkins/jenkins.war --logfile=/var/log/jenkins/jenkins.log --webroot=/var/cache/jenkins/war --daemon --httpPort=8081 --debug=5 --handlerCountMax=100 --handlerCountMaxIdle=20
+
+
+官方推荐docker安装 ：https://jenkins.io/zh/doc/book/installing/
+1.docker 命令：
+	docker run \
+	  -u root \
+	  --rm \
+	  -d \
+	  -p 8080:8080 \
+	  -p 50000:50000 \
+	  -v jenkins-data:/var/jenkins_home \
+	  -v /var/run/docker.sock:/var/run/docker.sock \
+	  jenkinsci/blueocean
+
+2.docker-compose：
+		version: '3.3'
+		services:
+		  jenkins:
+		    image: jenkinsci/blueocean:latest
+		    container_name: jenkins
+		    restart: always
+		    user: root
+		    ports:
+		      - 8080:8080
+		      - 50000:50000
+		    volumes:
+		      - /data/jenkins_home:/var/jenkins_home
+		      - /var/run/docker.sock:/var/run/docker.sock
+		     // - /usr/local/java:/usr/local/java 容器内部安装有不需要
+			  - /usr/local/maven:/usr/local/maven
+			  - /usr/bin/git:/usr/bin/git
+
+
+question:
+	1.访问出现一直在启动中,切换为国内镜像。
+	  修改文件：jenkins_home/hudson.model.UpdateCenter.xml
+		原始：https://updates.jenkins.io/update-center.json
+		国内镜像：http://mirror.xmission.com/jenkins/updates/update-center.json
+		(推荐)清华镜像：https://mirrors.tuna.tsinghua.edu.cn/jenkins/updates/update-center.json
+
+		
+
+
+
+
+
+
+
