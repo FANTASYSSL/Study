@@ -1,0 +1,29 @@
+version: '3.3'
+services:
+  dev_redis:
+    image: redis:latest
+    container_name: dev_redis
+    restart: always
+    ports: 
+      - 6379:6379
+    command: redis-server --appendonly yes  --requirepass 123456
+    networks: 
+      - dev_redis
+
+  dev_rabbitmq:
+    image: rabbitmq:3.8.3-management
+    container_name: dev_rabbitmq
+    restart: always
+    ports: 
+      - 5673:5672
+      - 15673:15672
+    environment:
+      RABBITMQ_DEFAULT_USER: admin
+      RABBITMQ_DEFAULT_PASS: admin
+    networks: 
+      - dev_rabbitmq
+
+networks:
+  dev_redis:
+  dev_rabbitmq:
+

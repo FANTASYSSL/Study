@@ -1,0 +1,31 @@
+version: '3.3'
+services:
+  test_redis:
+    image: redis:latest
+    container_name: mall_test_redis
+    restart: always
+    ports: 
+      - 16379:6379
+    volumes:
+      - /data/redis_test_mall:/data
+    command: redis-server --appendonly yes  --requirepass 1234567 
+    networks: 
+      - test_redis
+
+# mall_test_rabbitmq:
+#   image: rabbitmq:3.8.3-management
+#   container_name: mall_test_rabbitmq
+#   restart: always
+#   ports: 
+#     - 5672:5672
+#     - 15672:15672
+#   environment:
+#     RABBITMQ_DEFAULT_USER: admin
+#     RABBITMQ_DEFAULT_PASS: admin
+#   networks: 
+#     - test_rabbitmq
+
+networks:
+  test_redis:
+  #test_rabbitmq:
+

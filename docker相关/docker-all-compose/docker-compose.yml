@@ -1,0 +1,29 @@
+version: '3.3'
+services:
+  wch_redis:
+    image: redis:latest
+    container_name: wch_redis
+    restart: always
+    ports: 
+      - 26379:6379
+    command: redis-server --appendonly yes  --requirepass 123456
+    networks: 
+      - w_redis
+
+  wch_rabbitmq:
+    image: rabbitmq:3.8.3-management
+    container_name: wch_rabbitmq
+    restart: always
+    ports: 
+      - 5688:5672
+      - 15688:15672
+    environment:
+      RABBITMQ_DEFAULT_USER: admin
+      RABBITMQ_DEFAULT_PASS: admin
+    networks: 
+      - w_rabbitmq
+
+networks:
+  w_redis:
+  w_rabbitmq:
+

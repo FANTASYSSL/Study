@@ -1,0 +1,1 @@
+此dockerfile为构建最新版带有web控制台插件的rabbitmq版本，非必须，无需构建
