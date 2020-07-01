@@ -4,9 +4,10 @@
 	2.输入：	mongo -->> use admin 
 	3.创建用户名、密码、数据库：
 		use zhucai-analysi	
-		db.createUser( {
+		db.createUser({
 				user: "root",
 				pwd: "zhucaidb&test",
 				roles: [{ role: "userAdminAnyDatabase", db: "admin" }]	
+				})
 
 		#db.adminCommand({renameCollection: "zhucai.zhucai", to: "zhucai-analysis.test"})
