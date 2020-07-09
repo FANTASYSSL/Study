@@ -4,3 +4,12 @@ redis-cli -h 127.0.0.1 -p 6379 -a 1234567 keys 'SKU*' | xargs  redis-cli -h 127.
 redis-cli -h 127.0.0.1 -p 6379 -a 123321 keys 'cart_mid*' | xargs  redis-cli -h 127.0.0.1 -p 6379 -a 123321 del
 
 
+==============================================================
+使用 -n number 指定库号，默认0 : -n 15
+
+redis-cli -h 127.0.0.1 -p 6379 -a 1234567 -n 15 keys 'SKU*' | xargs  redis-cli -h 127.0.0.1 -p 6379 -a 1234567 -n 15 del
+
+错误解析：  (error) ERR wrong number of arguments for 'del' command
+ 若keys不存在则会提示这个错误 
+
+
